@@ -11,10 +11,31 @@ post {
 }
 
 script:pre-request {
-  // pm.request.headers.add(
-      { 
-          key: 'X-CSRF-TOKEN', 
-          value: bru.getEnvVar("X-CSRF-TOKEN") 
-      }
-  );
+  const csrfToken = bru.getEnvVar("X-CSRF-TOKEN");  // Retrieve CSRF token
+  const cookieString = bru.getEnvVar("cookie");  // Retrieve cookies
+  
+  console.log("Retrieved CSRF Token:", csrfToken);
+  console.log("Retrieved Cookie:", cookieString);
+  
+  // Set CSRF Token in Request Headers
+  if (csrfToken) {
+      req.setHeader("X-CSRF-TOKEN", csrfToken);
+  } else {
+      console.log("Error: CSRF Token is missing!");
+  }
+  
+  // Set Cookie Header for Logout Request
+  if (cookieString) {
+      req.setHeader("Cookie", cookieString);
+  } else {
+      console.log("Error: Cookie is missing!");
+  }
+  
+}
+
+tests {
+  const csrfToken = bru.getEnvVar("X-CSRF-TOKEN");
+  console.log("Retrieved CSRF Token:", csrfToken);
+  req.setHeader("x-csrf-token", csrfToken);
+  
 }

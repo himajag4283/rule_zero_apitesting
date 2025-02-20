@@ -13,17 +13,24 @@ delete {
 body:json {
   {
       "paths":[
-          "root/nda1",
-          "root/new-dir/"
+          "root/nda1copy.txt"
       ]
   }
 }
 
 script:pre-request {
-  // pm.request.headers.add(
-      { 
-          key: 'X-CSRF-TOKEN', 
-          value: bru.getEnvVar("X-CSRF-TOKEN") 
-      }
-  );
+  const token = res.getHeader("x-csrf-token");
+  bru.setEnvVar("X-CSRF-TOKEN", token);
+  console.log("Stored CSRF Token:", token);
+  
+  const cookies = res.getHeader("set-cookie");
+  if (cookies) {
+      // Convert array of cookies into a single string
+      const cookieString = cookies.join("; ");
+      bru.setEnvVar("cookie", cookieString);
+      console.log("Stored Cookies:", cookieString);
+  } else {
+      console.log("Error: No cookies found in response!");
+  }
+  
 }

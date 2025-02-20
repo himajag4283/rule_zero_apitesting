@@ -12,15 +12,23 @@ post {
 
 body:json {
   {
-      "contents": "```\nQuestion:\nWhat is an nda?\n```"
+      "contents": "```\nQuestion:\nWhat is LLM?\n```"
   }
 }
 
 script:pre-request {
-  // pm.request.headers.add(
-      { 
-          key: 'X-CSRF-TOKEN', 
-          value: bru.getEnvVar("X-CSRF-TOKEN") 
-      }
-  );
+  const token = res.getHeader("x-csrf-token");
+  bru.setEnvVar("X-CSRF-TOKEN", token);
+  console.log("Stored CSRF Token:", token);
+  
+  const cookies = res.getHeader("set-cookie");
+  if (cookies) {
+      // Convert array of cookies into a single string
+      const cookieString = cookies.join("; ");
+      bru.setEnvVar("cookie", cookieString);
+      console.log("Stored Cookies:", cookieString);
+  } else {
+      console.log("Error: No cookies found in response!");
+  }
+  
 }
