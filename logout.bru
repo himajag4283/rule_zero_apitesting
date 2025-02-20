@@ -1,0 +1,20 @@
+meta {
+  name: logout
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{base_url}}/logout
+  body: none
+  auth: none
+}
+
+script:pre-request {
+  // pm.request.headers.add(
+      { 
+          key: 'X-CSRF-TOKEN', 
+          value: bru.getEnvVar("X-CSRF-TOKEN") 
+      }
+  );
+}

@@ -1,0 +1,40 @@
+meta {
+  name: FILE move
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/file/move
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "src_path" : "root/untitled/untitled",
+      "dst_path" : "root/"
+  }
+}
+
+body:multipart-form {
+  ~src_path: 
+  ~dst_path: 
+}
+
+script:pre-request {
+  const token = res.getHeader("x-csrf-token");
+  bru.setEnvVar("X-CSRF-TOKEN", token);
+  console.log("Stored CSRF Token:", token);
+  
+  const cookies = res.getHeader("set-cookie");
+  if (cookies) {
+      // Convert array of cookies into a single string
+      const cookieString = cookies.join("; ");
+      bru.setEnvVar("cookie", cookieString);
+      console.log("Stored Cookies:", cookieString);
+  } else {
+      console.log("Error: No cookies found in response!");
+  }
+  
+}

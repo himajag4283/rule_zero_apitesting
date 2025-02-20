@@ -1,0 +1,29 @@
+meta {
+  name: FILE delete
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{base_url}}/file
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "paths":[
+          "root/nda1",
+          "root/new-dir/"
+      ]
+  }
+}
+
+script:pre-request {
+  // pm.request.headers.add(
+      { 
+          key: 'X-CSRF-TOKEN', 
+          value: bru.getEnvVar("X-CSRF-TOKEN") 
+      }
+  );
+}

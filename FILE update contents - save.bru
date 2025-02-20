@@ -1,0 +1,35 @@
+meta {
+  name: FILE update contents - save
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{base_url}}/file
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "file_id":3,
+      "contents":"Hello there!"
+  }
+}
+
+script:pre-request {
+  const token = res.getHeader("x-csrf-token");
+  bru.setEnvVar("X-CSRF-TOKEN", token);
+  console.log("Stored CSRF Token:", token);
+  
+  const cookies = res.getHeader("set-cookie");
+  if (cookies) {
+      // Convert array of cookies into a single string
+      const cookieString = cookies.join("; ");
+      bru.setEnvVar("cookie", cookieString);
+      console.log("Stored Cookies:", cookieString);
+  } else {
+      console.log("Error: No cookies found in response!");
+  }
+  
+}

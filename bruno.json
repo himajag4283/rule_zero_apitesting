@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "rule_zero",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

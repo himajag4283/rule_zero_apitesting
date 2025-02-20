@@ -1,0 +1,25 @@
+meta {
+  name: FILE copy
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/file/copy
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  ~src_path: 
+  ~dst_path: 
+}
+
+script:pre-request {
+  // pm.request.headers.add(
+      { 
+          key: 'X-CSRF-TOKEN', 
+          value: bru.getEnvVar("X-CSRF-TOKEN") 
+      }
+  );
+}

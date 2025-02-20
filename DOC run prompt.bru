@@ -1,0 +1,26 @@
+meta {
+  name: DOC run prompt
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{base_url}}/document/prompt
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "contents": "```\nQuestion:\nWhat is an nda?\n```"
+  }
+}
+
+script:pre-request {
+  // pm.request.headers.add(
+      { 
+          key: 'X-CSRF-TOKEN', 
+          value: bru.getEnvVar("X-CSRF-TOKEN") 
+      }
+  );
+}
